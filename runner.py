@@ -16,8 +16,6 @@ NUM_TESTS = 100
 # The number of requests to be sent per test
 NUM_REQUESTS = 10
 
-print("Hi")
-exit()
 
 def server_is_up() -> bool:
     """
@@ -212,6 +210,7 @@ def main():
         server_proc.interrupt()
         server_proc.wait()
         print_output(server, tester, duration)
+        exit()
 
 
 if __name__ == '__main__':
