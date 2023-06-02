@@ -6,7 +6,7 @@ from subtask import Subtask
 import requests
 from requests.exceptions import ConnectionError
 from time import perf_counter
-from typing import Callable, TypedDict
+from typing import Callable, TypedDict, Union
 from colorama import Fore
 import itertools
 
@@ -15,6 +15,8 @@ import itertools
 NUM_TESTS = 100
 # The number of requests to be sent per test
 NUM_REQUESTS = 10
+# Test timeout duration
+TEST_TIMEOUT = 120
 
 
 def server_is_up() -> bool:
@@ -164,16 +166,18 @@ variants.append({
 def print_output(
     server: Callable[[], Subtask],
     tester: Callable[[], Subtask],
-    duration: float,
+    duration: Union[float, str],
     ending="\n",
     output=sys.stdout,
     color="",
 ) -> None:
+    if isinstance(duration, float):
+        duration = f"{duration:9.3f}"
     print(
         f"{color}"
         f"| {name_variant(server).ljust(25)} "
         f"| {name_variant(tester).ljust(25)} "
-        f"| {duration:9.3f} "
+        f"| {duration.ljust(9)} "
         f"|"
         f"{Fore.RESET if color != '' else ''}",
         end=ending,
@@ -198,19 +202,48 @@ def main():
         tester = variant["tester"]
         start_time = perf_counter()
         tester_proc = tester()
+
+        timeout = False
+
         if "--progress" in sys.argv:
             while tester_proc.wait(0.1) is None:
                 duration = perf_counter() - start_time
-                print_output(
-                    server, tester, duration, "\r", sys.stderr, Fore.YELLOW)
-            assert tester_proc.wait() == 0
+                # Check for timeout
+                if duration > TEST_TIMEOUT:
+                    tester_proc.interrupt()
+                    timeout = True
+                    break
+                else:
+                    print_output(
+                        server,
+                        tester,
+                        duration,
+                        "\r",
+                        sys.stderr,
+                        Fore.YELLOW,
+                    )
         else:
-            assert tester_proc.wait() == 0
+            if tester_proc.wait(TEST_TIMEOUT) != 0:
+                if tester_proc.poll() is None:
+                    tester_proc.interrupt()
+                    timeout = True
         duration = perf_counter() - start_time
         server_proc.interrupt()
         server_proc.wait()
-        print_output(server, tester, duration)
-        exit()
+        if timeout:
+            print_output(
+                server,
+                tester,
+                f"Timeout ({TEST_TIMEOUT} s)",
+            )
+        elif tester_proc.wait() != 0:
+            print_output(
+                server,
+                tester,
+                "Error",
+            )
+        else:
+            print_output(server, tester, duration)
 
 
 if __name__ == '__main__':
