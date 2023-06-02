@@ -139,15 +139,15 @@ variants += [  # type: ignore
     {"server": s, "tester": t}
     for s, t in itertools.product(
         [
-            # flask_jsonify,
+            flask_jsonify,
             flask_json_lib,
             express,
         ],
         [
-            # pytest_real_request_get,
+            pytest_real_request_get,
             pytest_real_request_post,
-            # jest_fetch_get,
-            # jest_sync_request_get,
+            jest_fetch_get,
+            jest_sync_request_get,
             jest_fetch_post,
             jest_sync_request_post,
         ]
@@ -157,10 +157,10 @@ variants.append({
     "server": flask_jsonify,
     "tester": pytest_flask_testing,
 })
-# variants.append({
-#     "server": flask_json_lib,
-#     "tester": pytest_flask_testing,
-# })
+variants.append({
+    "server": flask_json_lib,
+    "tester": pytest_flask_testing,
+})
 
 
 def print_output(
