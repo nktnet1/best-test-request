@@ -11,6 +11,12 @@ from colorama import Fore
 import itertools
 
 
+# The number of tests to be run
+NUM_TESTS = 100
+# The number of requests to be sent per test
+NUM_REQUESTS = 10
+
+
 def server_is_up() -> bool:
     """
     Callback to determine whether the server is up and running
@@ -46,6 +52,10 @@ def express_server(env: dict[str, str]):
 
 
 def pytest_tester(env: dict[str, str]):
+    env.update({
+        "NUM_TESTS": str(NUM_TESTS),
+        "NUM_REQUESTS": str(NUM_REQUESTS),
+    })
     return Subtask(
         ["poetry", "run", "pytest"],
         env=env,
@@ -53,6 +63,10 @@ def pytest_tester(env: dict[str, str]):
 
 
 def jest_tester(env: dict[str, str]):
+    env.update({
+        "NUM_TESTS": str(NUM_TESTS),
+        "NUM_REQUESTS": str(NUM_REQUESTS),
+    })
     return Subtask(
         ["npm", "run", "test"],
         env=env,
@@ -69,7 +83,7 @@ def flask_json_lib():
     return flask_server({})
 
 
-def express_default():
+def express():
     return express_server({})
 
 
@@ -117,15 +131,21 @@ class Variation(TypedDict):
 
 variants: list[Variation] = []
 
+# To adjust the benchmarks being run, comment out or uncomment these cases
+
 variants += [  # type: ignore
     {"server": s, "tester": t}
     for s, t in itertools.product(
-        [flask_jsonify, flask_json_lib, express_default],
         [
-            pytest_real_request_get,
+            # flask_jsonify,
+            flask_json_lib,
+            express,
+        ],
+        [
+            # pytest_real_request_get,
             pytest_real_request_post,
-            jest_fetch_get,
-            jest_sync_request_get,
+            # jest_fetch_get,
+            # jest_sync_request_get,
             jest_fetch_post,
             jest_sync_request_post,
         ]
@@ -135,10 +155,10 @@ variants.append({
     "server": flask_jsonify,
     "tester": pytest_flask_testing,
 })
-variants.append({
-    "server": flask_json_lib,
-    "tester": pytest_flask_testing,
-})
+# variants.append({
+#     "server": flask_json_lib,
+#     "tester": pytest_flask_testing,
+# })
 
 
 def print_output(
