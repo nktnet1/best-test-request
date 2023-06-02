@@ -229,7 +229,8 @@ def main():
                     timeout = True
         duration = perf_counter() - start_time
         server_proc.interrupt()
-        server_proc.wait()
+        server_proc.wait(1)
+        server_proc.kill()
         if timeout:
             print_output(
                 server,
