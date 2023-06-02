@@ -7,6 +7,7 @@ import requests
 from requests.exceptions import ConnectionError
 from time import perf_counter
 from typing import Callable, TypedDict
+from colorama import Fore
 import itertools
 
 
@@ -146,30 +147,53 @@ def print_output(
     duration: float,
     ending="\n",
     output=sys.stdout,
+    color="",
 ) -> None:
     print(
-        f" {name_variant(server).ljust(25)} "
+        f"{color}"
+        f"| {name_variant(server).ljust(25)} "
         f"| {name_variant(tester).ljust(25)} "
-        f"| {duration:6.3f}",
+        f"| {duration:9.3f} "
+        f"|"
+        f"{Fore.RESET if color != '' else ''}",
         end=ending,
         file=output,
     )
 
 
-for variant in variants:
-    server = variant["server"]
-    server_proc = server()
-    tester = variant["tester"]
-    start_time = perf_counter()
-    tester_proc = tester()
-    if "--progress" in sys.argv:
-        while tester_proc.wait(0.1) is None:
-            duration = perf_counter() - start_time
-            print_output(server, tester, duration, "\r", sys.stderr)
-        assert tester_proc.wait() == 0
-    else:
-        assert tester_proc.wait() == 0
-    duration = perf_counter() - start_time
-    server_proc.interrupt()
-    server_proc.wait()
-    print_output(server, tester, duration)
+def main():
+    print("# Benchmark results")
+    print("")
+    print(
+        f"| {'Server'.ljust(25)} "
+        f"| {'Tester'.ljust(25)} "
+        f"| {'Duration'.ljust(9)} "
+        f"|"
+    )
+    print(f"{'=' * (69)}")  # Nice
+
+    for variant in variants:
+        server = variant["server"]
+        server_proc = server()
+        tester = variant["tester"]
+        start_time = perf_counter()
+        tester_proc = tester()
+        if "--progress" in sys.argv:
+            while tester_proc.wait(0.1) is None:
+                duration = perf_counter() - start_time
+                print_output(
+                    server, tester, duration, "\r", sys.stderr, Fore.YELLOW)
+            assert tester_proc.wait() == 0
+        else:
+            assert tester_proc.wait() == 0
+        duration = perf_counter() - start_time
+        server_proc.interrupt()
+        server_proc.wait()
+        print_output(server, tester, duration)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nAborted")
