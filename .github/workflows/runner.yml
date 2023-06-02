@@ -3,7 +3,7 @@ name: Run benchmark
 on: [push]
 
 jobs:
-  Pytest:
+  Benchmark:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
