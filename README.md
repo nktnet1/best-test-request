@@ -1,6 +1,14 @@
 # Best Test Request
 
-Figuring out the most efficient way to send requests to test web servers
+Figuring out the most efficient method to send requests to test web servers
+
+## Usage
+
+1. Install Python dependencies with `poetry install`
+2. Install JS dependencies with `npm install`
+3. Run the test script with `poetry run python runner.py`
+
+You can use `--progress` to get a live counter (so you know it hasn't broken)
 
 # List of methods
 
