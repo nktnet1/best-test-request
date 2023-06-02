@@ -12,13 +12,13 @@ things relate.
 
 Here's a [link to the results](https://github.com/MiguelGuthridge/best-test-request/actions/runs/5155195155).
 
-* Using sync-request is about 5x slower than using the fetch API.
+* Using `sync-request` is about 5x slower than using the `fetch` API.
 * Python is about twice as slow as JS when sending real requests.
 * When injecting fake requests using Flask's testing library (instead of
   sending real requests), performance improves by 5x.
 * If we can find a library to inject fake requests into Express, we may be able
   to get a similar performance improvement, meaning the improvement would be
-  25x compared to using sync-request.
+  25x compared to using `sync-request`.
 
 ## Usage
 
