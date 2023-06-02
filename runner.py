@@ -14,7 +14,7 @@ import itertools
 # The number of tests to be run
 NUM_TESTS = 100
 # The number of requests to be sent per test
-NUM_REQUESTS = 10
+NUM_REQUESTS = 50
 # Test timeout duration
 TEST_TIMEOUT = 120
 
