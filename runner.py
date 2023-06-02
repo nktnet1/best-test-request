@@ -190,7 +190,7 @@ def main():
         f"| {'Duration'.ljust(9)} "
         f"|"
     )
-    print(f"{'=' * (69)}")  # Nice
+    print(f"|{'=' * 27}|{'=' * 27}|{'=' * 11}|")
 
     for variant in variants:
         server = variant["server"]
