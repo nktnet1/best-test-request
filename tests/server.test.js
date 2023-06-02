@@ -3,9 +3,11 @@ import request from "sync-request";
 const SYNC_REQUEST = process.env.SYNC_REQUEST;
 const GET_REQUEST = process.env.GET_REQUEST;
 
+const NUM_ITERATIONS = 1000;
+
 if (SYNC_REQUEST) {
   if (GET_REQUEST) {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < NUM_ITERATIONS; i++) {
       test(`sync-request GET ${i}`, () => {
         const response = request(
           'GET',
@@ -20,7 +22,7 @@ if (SYNC_REQUEST) {
       });
     }
   } else {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < NUM_ITERATIONS; i++) {
       test(`sync-request POST ${i}`, () => {
         const response = request(
           'POST',
@@ -37,7 +39,7 @@ if (SYNC_REQUEST) {
   }
 } else {
   if (GET_REQUEST) {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < NUM_ITERATIONS; i++) {
       test(`fetch GET ${i}`, async () => {
         const response = await fetch(
           `http://127.0.0.1:5001?input=${i}`,
@@ -50,7 +52,7 @@ if (SYNC_REQUEST) {
       });
     }
   } else {
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < NUM_ITERATIONS; i++) {
       test(`fetch POST ${i}`, async () => {
         const response = await fetch(
           `http://127.0.0.1:5001`,
