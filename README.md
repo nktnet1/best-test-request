@@ -2,18 +2,41 @@
 
 Figuring out the most efficient way to send requests to test web servers
 
-## List of methods
+# List of methods
 
-### Flask
+## Flask
+
+Run server using `poetry run python -m flask_app`
 
 All combinations of:
 
-* Request type:
-  * `requests` library to send requests (environment variable `REAL_REQUEST`)
-  * `flask.testing` library to send fake requests
-* Request method:
-  * `GET` with query string (environment variable `GET_REQUEST`)
-  * `POST` with JSON
-* JSON encoder
-  * Standard `json` library
-  * Flask's `jsonify` function
+#### Request strategy
+
+* `requests` library to send requests (environment variable `REAL_REQUEST`)
+* `flask.testing` library to send fake requests
+
+#### Request method
+
+* `GET` with query string (environment variable `GET_REQUEST`)
+* `POST` with JSON
+
+#### JSON encoder
+
+* Standard `json` library
+* Flask's `jsonify` function
+
+## Express
+
+Run server using `npm start`
+
+All combinations of:
+
+#### Request strategy
+
+* `sync-request` to send requests (environment variable `SYNC_REQUEST`)
+* Node's built-in `fetch` to send requests
+
+#### Request method
+
+* `GET` with query string (environment variable `GET_REQUEST`)
+* `POST` with JSON
