@@ -22,8 +22,8 @@ All combinations of:
 
 #### JSON encoder
 
+* Flask's `jsonify` function (environment variable `FLASK_JSONIFY`)
 * Standard `json` library
-* Flask's `jsonify` function
 
 ## Express
 

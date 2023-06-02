@@ -6,13 +6,13 @@ import json
 from flask import Flask, request, jsonify
 
 
-USE_FLASK_JSONIFY = os.getenv('USE_FLASK_JSONIFY') is not None
+FLASK_JSONIFY = os.getenv('FLASK_JSONIFY') is not None
 
 
 app = Flask(__name__)
 
 
-if USE_FLASK_JSONIFY:
+if FLASK_JSONIFY:
     @app.post('/')
     def root_post_jsonify():
         assert request.json is not None
