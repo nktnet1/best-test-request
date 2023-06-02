@@ -16,6 +16,8 @@ NUM_TESTS = 100
 # The number of requests to be sent per test
 NUM_REQUESTS = 10
 
+print("Hi")
+exit()
 
 def server_is_up() -> bool:
     """
