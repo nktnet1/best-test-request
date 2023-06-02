@@ -1,0 +1,33 @@
+name: Run benchmark
+
+on: [push]
+
+jobs:
+  Pytest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - uses: Gr1N/setup-poetry@v8
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+    - run: poetry --version
+    - name: Install Python dependencies
+      run: poetry install
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    - name: Install JS dependencies
+      run: npm ci
+    - name: Run benchmark
+      run: |
+        poetry run python runner.py >> $GITHUB_STEP_SUMMARY
