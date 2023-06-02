@@ -194,7 +194,7 @@ def main():
         f"| {'Duration'.ljust(9)} "
         f"|"
     )
-    print(f"|{'=' * 27}|{'=' * 27}|{'=' * 11}|")
+    print(f"| {'-' * 25} | {'-' * 25} | {'-' * 8}: |")
 
     for variant in variants:
         server = variant["server"]
