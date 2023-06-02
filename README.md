@@ -1,6 +1,8 @@
 # Best Test Request
 
-Figuring out the most efficient method to send requests to test web servers
+Figuring out the most efficient method to send requests to test web servers.
+
+[Link to results](https://github.com/MiguelGuthridge/best-test-request/actions/runs/5155195155).
 
 ## Usage
 
