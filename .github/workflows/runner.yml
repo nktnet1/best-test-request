@@ -30,4 +30,4 @@ jobs:
       run: npm ci
     - name: Run benchmark
       run: |
-        timeout --signal=SIGINT 10m poetry run python runner.py | tee -a $GITHUB_STEP_SUMMARY
+        timeout --signal=SIGINT 20m poetry run python runner.py | tee -a $GITHUB_STEP_SUMMARY
