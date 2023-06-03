@@ -115,6 +115,10 @@ def jest_sync_request_post():
     return jest_tester({"SYNC_REQUEST": "TRUE"})
 
 
+def jest_light_my_request():
+    return jest_tester({"LIGHT_MY_REQUEST": "TRUE"})
+
+
 def jest_fetch_get():
     return jest_tester({"GET_REQUEST": "TRUE"})
 
@@ -160,6 +164,10 @@ variants.append({
 variants.append({
     "server": flask_json_lib,
     "tester": pytest_flask_testing,
+})
+variants.append({
+    "server": express,
+    "tester": jest_light_my_request,
 })
 
 
