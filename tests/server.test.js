@@ -1,8 +1,10 @@
 import request from 'sync-request';
+import syncRequestCurl from 'sync-request-curl';
 import inject from 'light-my-request';
 import server from '../express_app/server';
 
 const SYNC_REQUEST = process.env.SYNC_REQUEST;
+const SYNC_REQUEST_CURL = process.env.SYNC_REQUEST_CURL;
 const LIGHT_MY_REQUEST = process.env.LIGHT_MY_REQUEST;
 const GET_REQUEST = process.env.GET_REQUEST;
 
@@ -47,6 +49,42 @@ if (SYNC_REQUEST) {
       });
     }
   }
+}  else if (SYNC_REQUEST_CURL) {
+  if (GET_REQUEST) {
+    for (let i = 0; i < NUM_TESTS; i++) {
+      test(`sync-request-curl GET ${i}`, () => {
+        for (let j = 0; j < NUM_REQUESTS; j++) {
+          const response = syncRequestCurl(
+            'GET',
+            'http://127.0.0.1:5001/',
+            {
+              qs: { input: i },
+            },
+          );
+          expect(
+            JSON.parse(response.getBody('utf-8')).output
+          ).toStrictEqual(i * 2);
+        }
+      });
+    }
+  } else {
+    for (let i = 0; i < NUM_TESTS; i++) {
+      test(`sync-request POST ${i}`, () => {
+        for (let j = 0; j < NUM_REQUESTS; j++) {
+          const response = syncRequestCurl(
+            'POST',
+            'http://127.0.0.1:5001/',
+            {
+              json: { input: i },
+            },
+          );
+          expect(
+            JSON.parse(response.getBody('utf-8')).output
+          ).toStrictEqual(i * 2);
+        }
+      });
+    }
+}
 } else if (LIGHT_MY_REQUEST) {
   if (GET_REQUEST) {
     for (let i = 0; i < NUM_TESTS; i++) {
