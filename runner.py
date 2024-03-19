@@ -115,6 +115,10 @@ def jest_sync_request_post():
     return jest_tester({"SYNC_REQUEST": "TRUE"})
 
 
+def jest_sync_request_curl_post():
+    return jest_tester({ "SYNC_REQUEST_CURL": "TRUE" })
+
+
 def jest_light_my_request():
     return jest_tester({"LIGHT_MY_REQUEST": "TRUE"})
 
@@ -126,6 +130,13 @@ def jest_fetch_get():
 def jest_sync_request_get():
     return jest_tester({
         "SYNC_REQUEST": "TRUE",
+        "GET_REQUEST": "TRUE",
+    })
+
+
+def jest_sync_request_curl_get():
+    return jest_tester({
+        "SYNC_REQUEST_CURL": "TRUE",
         "GET_REQUEST": "TRUE",
     })
 
@@ -154,6 +165,8 @@ variants += [  # type: ignore
             jest_sync_request_get,
             jest_fetch_post,
             jest_sync_request_post,
+            jest_sync_request_curl_get,
+            jest_sync_request_curl_post,
         ]
     )
 ]
@@ -184,7 +197,7 @@ def print_output(
     print(
         f"{color}"
         f"| {name_variant(server).ljust(25)} "
-        f"| {name_variant(tester).ljust(25)} "
+        f"| {name_variant(tester).ljust(30)} "
         f"| {duration.ljust(9)} "
         f"|"
         f"{Fore.RESET if color != '' else ''}",
@@ -200,11 +213,11 @@ def main():
     print()
     print(
         f"| {'Server'.ljust(25)} "
-        f"| {'Tester'.ljust(25)} "
+        f"| {'Tester'.ljust(30)} "
         f"| {'Duration'.ljust(9)} "
         f"|"
     )
-    print(f"| {'-' * 25} | {'-' * 25} | {'-' * 8}: |")
+    print(f"| {'-' * 25} | {'-' * 30} | {'-' * 8}: |")
 
     for variant in variants:
         server = variant["server"]
